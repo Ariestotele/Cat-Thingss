@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cat Care Cheat Sheet</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Source+Sans+3:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0f0f;
+    --surface: #1a1a1a;
+    --surface-2: #222222;
+    --surface-3: #2a2a2a;
+    --border: #333;
+    --text: #e8e4df;
+    --text-muted: #8a8580;
+    --text-dim: #5a5550;
+    --safe: #4ade80;
+    --safe-bg: rgba(74,222,128,0.08);
+    --safe-border: rgba(74,222,128,0.2);
+    --caution: #fbbf24;
+    --caution-bg: rgba(251,191,36,0.08);
+    --caution-border: rgba(251,191,36,0.2);
+    --danger: #f87171;
+    --danger-bg: rgba(248,113,113,0.08);
+    --danger-border: rgba(248,113,113,0.2);
+    --info: #60a5fa;
+    --info-bg: rgba(96,165,250,0.08);
+    --info-border: rgba(96,165,250,0.2);
+    --accent: #e8a87c;
+    --accent-dim: rgba(232,168,124,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  .header {
+    padding: 3rem 2rem 2rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -60%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(232,168,124,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header .cat-icon {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+    display: block;
+    opacity: 0.9;
+  }
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 800;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 0.3rem;
+  }
+  .header h1 span { color: var(--accent); }
+  .header p {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    font-weight: 300;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  /* ── Navigation Tabs ── */
+  .nav-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(15,15,15,0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 1rem;
+  }
+  .nav-tabs {
+    display: flex;
+    gap: 0;
+    max-width: 900px;
+    margin: 0 auto;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .nav-tab {
+    padding: 0.85rem 1.2rem;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+    position: relative;
+    transition: color 0.25s;
+  }
+  .nav-tab:hover { color: var(--text); }
+  .nav-tab.active { color: var(--accent); }
+  .nav-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 1.2rem;
+    right: 1.2rem;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 2px 2px 0 0;
+  }
+
+  /* ── Search ── */
+  .search-bar {
+    max-width: 900px;
+    margin: 1.5rem auto 0;
+    padding: 0 1.5rem;
+  }
+  .search-input {
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 2.8rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-input::placeholder { color: var(--text-dim); }
+  .search-input:focus { border-color: var(--accent); }
+  .search-wrap {
+    position: relative;
+  }
+  .search-wrap::before {
+    content: '⌕';
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-dim);
+    font-size: 1.1rem;
+  }
+
+  /* ── Content Area ── */
+  .content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 1.5rem;
+  }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ── Section Titles ── */
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin: 2rem 0 0.3rem;
+    color: var(--text);
+  }
+  .section-title:first-child { margin-top: 0.5rem; }
+  .section-subtitle {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 300;
+    margin-bottom: 1.2rem;
+  }
+
+  /* ── Legend ── */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 0.8rem 1rem;
+    background: var(--surface);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+  }
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+  .legend-dot.safe { background: var(--safe); }
+  .legend-dot.caution { background: var(--caution); }
+  .legend-dot.danger { background: var(--danger); }
+
+  /* ── Food Cards ── */
+  .food-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+  .food-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.9rem 1rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    transition: border-color 0.2s, transform 0.15s;
+    cursor: default;
+  }
+  .food-card:hover {
+    border-color: var(--text-dim);
+    transform: translateY(-1px);
+  }
+  .food-card.safe { border-left: 3px solid var(--safe); }
+  .food-card.caution { border-left: 3px solid var(--caution); }
+  .food-card.danger { border-left: 3px solid var(--danger); }
+  .food-card .emoji { font-size: 1.5rem; flex-shrink: 0; line-height: 1; margin-top: 2px; }
+  .food-card .info { flex: 1; min-width: 0; }
+  .food-card .name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text);
+    margin-bottom: 0.15rem;
+  }
+  .food-card .note {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+  .food-card .badge {
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+  .food-card.safe .badge { color: var(--safe); background: var(--safe-bg); }
+  .food-card.caution .badge { color: var(--caution); background: var(--caution-bg); }
+  .food-card.danger .badge { color: var(--danger); background: var(--danger-bg); }
+
+  /* ── Info Cards (non-food sections) ── */
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+  .info-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.1rem;
+    transition: border-color 0.2s;
+  }
+  .info-card:hover { border-color: var(--text-dim); }
+  .info-card .card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .info-card .card-header .emoji { font-size: 1.3rem; }
+  .info-card .card-header .title {
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .info-card .card-body {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+  .info-card.warn { border-left: 3px solid var(--danger); }
+  .info-card.tip { border-left: 3px solid var(--safe); }
+  .info-card.note { border-left: 3px solid var(--info); }
+  .info-card.alert { border-left: 3px solid var(--caution); }
+
+  /* ── Quick Ref Table ── */
+  .ref-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+    font-size: 0.88rem;
+  }
+  .ref-table th {
+    text-align: left;
+    padding: 0.7rem 1rem;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .ref-table td {
+    padding: 0.65rem 1rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+  .ref-table tr:hover td { background: var(--surface); color: var(--text); }
+  .ref-table .item-name { color: var(--text); font-weight: 500; }
+
+  /* ── Stat Boxes ── */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+  .stat-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem;
+    text-align: center;
+  }
+  .stat-box .val {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1.2;
+  }
+  .stat-box .label {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 0.2rem;
+  }
+
+  /* ── Empty state ── */
+  .no-results {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-dim);
+    font-size: 1rem;
+  }
+  .no-results .big { font-size: 2.5rem; margin-bottom: 0.5rem; display: block; }
+
+  /* ── Print ── */
+  .print-btn {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, color 0.2s;
+    z-index: 50;
+  }
+  .print-btn:hover { background: var(--accent); color: var(--bg); }
+
+  @media print {
+    .nav-bar, .search-bar, .print-btn { display: none !important; }
+    body { background: #fff; color: #111; }
+    .header { border-bottom: 2px solid #111; }
+    .header h1 { color: #111; }
+    .header h1 span { color: #c47a50; }
+    .header p { color: #555; }
+    .food-card, .info-card, .stat-box { border-color: #ccc; background: #fafafa; break-inside: avoid; }
+    .food-card .note, .info-card .card-body, .ref-table td { color: #444; }
+    .tab-panel { display: block !important; page-break-before: always; }
+    .section-title { margin-top: 1.5rem; }
+  }
+
+  @media (max-width: 600px) {
+    .header { padding: 2rem 1rem 1.5rem; }
+    .content { padding: 1rem; }
+    .food-grid, .info-grid { grid-template-columns: 1fr; }
+    .nav-tab { padding: 0.75rem 0.8rem; font-size: 0.78rem; }
+    .stat-row { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <span class="cat-icon">🐈‍⬛</span>
+  <h1>The <span>Cat</span> Codex</h1>
+  <p>A complete quick-reference for keeping your feline happy, healthy, and safe</p>
+</div>
+
+<nav class="nav-bar">
+  <div class="nav-tabs" id="navTabs">
+    <button class="nav-tab active" data-tab="food">Food Guide</button>
+    <button class="nav-tab" data-tab="toxic">Toxic & Dangerous</button>
+    <button class="nav-tab" data-tab="health">Health Signs</button>
+    <button class="nav-tab" data-tab="care">Daily Care</button>
+    <button class="nav-tab" data-tab="quickref">Quick Ref</button>
+  </div>
+</nav>
+
+<div class="search-bar">
+  <div class="search-wrap">
+    <input type="text" class="search-input" id="searchInput" placeholder="Search anything… foods, symptoms, tips">
+  </div>
+</div>
+
+<div class="content" id="content"></div>
+
+<button class="print-btn" onclick="window.print()" title="Print cheat sheet">🖨</button>
+
+<script>
+const DATA = {
+  food: {
+    safe: [
+      { emoji:"🍗", name:"Cooked Chicken", note:"Plain, boneless, skinless. Great protein source." },
+      { emoji:"🐟", name:"Cooked Salmon", note:"Rich in omega-3. Remove all bones. No seasoning." },
+      { emoji:"🦃", name:"Cooked Turkey", note:"Plain and boneless. Good occasional treat." },
+      { emoji:"🐟", name:"Tuna (in water)", note:"Occasional treat only — too much can cause mercury buildup." },
+      { emoji:"🥚", name:"Cooked Eggs", note:"Scrambled or boiled, no oil or seasoning." },
+      { emoji:"🎃", name:"Pumpkin (plain)", note:"Great for digestion. Use pure canned (not pie filling)." },
+      { emoji:"🥕", name:"Cooked Carrots", note:"Soft and cut small. Good source of beta-carotene." },
+      { emoji:"🫐", name:"Blueberries", note:"Antioxidant-rich. Give a few as a treat." },
+      { emoji:"🍉", name:"Watermelon", note:"Seedless, no rind. Hydrating summer treat." },
+      { emoji:"🍌", name:"Banana", note:"Small pieces only. High in sugar, so very sparingly." },
+      { emoji:"🥒", name:"Cucumber", note:"Peeled and sliced thin. Low calorie, hydrating." },
+      { emoji:"🥦", name:"Steamed Broccoli", note:"Small florets. Some cats enjoy it, good fiber." },
+      { emoji:"🫛", name:"Cooked Green Beans", note:"Plain, no seasoning. Healthy low-cal snack." },
+      { emoji:"🍚", name:"Plain Rice", note:"Small amounts. Can help settle upset stomach." },
+      { emoji:"🍈", name:"Cantaloupe", note:"Small cubes, remove seeds. Many cats love the smell." },
+    ],
+    caution: [
+      { emoji:"🥛", name:"Milk / Dairy", note:"Most adult cats are lactose intolerant. Can cause diarrhea." },
+      { emoji:"🐟", name:"Raw Fish", note:"Thiaminase destroys vitamin B1. Can contain parasites." },
+      { emoji:"🥩", name:"Raw Meat", note:"Risk of salmonella/E.coli. If feeding raw, consult a vet." },
+      { emoji:"🧀", name:"Cheese", note:"Small amounts occasionally OK. Watch for digestive upset." },
+      { emoji:"🍓", name:"Strawberries", note:"Safe but high sugar. Tiny pieces, very rarely." },
+      { emoji:"🍞", name:"Bread", note:"Plain bread is OK in tiny amounts. No nutritional value." },
+      { emoji:"🥜", name:"Peanut Butter", note:"Not toxic but high fat. Check for xylitol (deadly)." },
+      { emoji:"🌽", name:"Corn", note:"Not harmful but hard to digest. Off the cob only." },
+      { emoji:"🐾", name:"Liver", note:"Rich in vitamin A. Too much causes toxicity." },
+    ],
+    danger: [
+      { emoji:"🧅", name:"Onions & Garlic", note:"Extremely toxic. Damages red blood cells. All forms." },
+      { emoji:"🍫", name:"Chocolate", note:"Theobromine is toxic. Dark chocolate is worst." },
+      { emoji:"🍇", name:"Grapes & Raisins", note:"Can cause kidney failure. Even small amounts." },
+      { emoji:"☕", name:"Coffee & Caffeine", note:"Causes rapid heart rate, seizures. No tea/energy drinks." },
+      { emoji:"🍺", name:"Alcohol", note:"Extremely dangerous. Even small amounts can be fatal." },
+      { emoji:"🫘", name:"Xylitol", note:"Found in gum, candy, peanut butter. Causes liver failure." },
+      { emoji:"🥑", name:"Avocado", note:"Contains persin. Can cause vomiting and diarrhea." },
+      { emoji:"🌰", name:"Macadamia Nuts", note:"Causes weakness, vomiting, tremors, hyperthermia." },
+      { emoji:"🍄", name:"Mushrooms (wild)", note:"Many wild varieties are lethal. Stick to none." },
+      { emoji:"🧄", name:"Chives & Leeks", note:"Same family as onions. Equally toxic to cats." },
+      { emoji:"🫖", name:"Green Tea / Matcha", note:"Contains caffeine. Can cause poisoning." },
+      { emoji:"🥜", name:"Walnuts", note:"Can harbor mold producing tremorgenic mycotoxins." },
+      { emoji:"🍬", name:"Candy & Sweets", note:"Sugar, xylitol, and choking hazards." },
+    ]
+  },
+  toxic_plants: [
+    { emoji:"🌷", name:"Lilies", note:"ALL parts are lethal — even pollen or water from the vase. Causes kidney failure.", severity:"critical" },
+    { emoji:"🌿", name:"Pothos / Devil's Ivy", note:"Causes oral irritation, drooling, vomiting.", severity:"high" },
+    { emoji:"🪴", name:"Dieffenbachia", note:"Intense mouth/tongue burning, difficulty swallowing.", severity:"high" },
+    { emoji:"🌺", name:"Azaleas", note:"Even a few leaves can cause vomiting, diarrhea, coma.", severity:"critical" },
+    { emoji:"🌸", name:"Oleander", note:"Highly toxic. Affects the heart. Can be fatal.", severity:"critical" },
+    { emoji:"🪷", name:"Peace Lily", note:"Mouth irritation, drooling. Less severe than true lilies.", severity:"medium" },
+    { emoji:"🎄", name:"Poinsettia", note:"Mildly irritating. Overblown reputation but still avoid.", severity:"low" },
+    { emoji:"🌱", name:"Aloe Vera", note:"Causes vomiting, diarrhea, lethargy.", severity:"medium" },
+    { emoji:"🌿", name:"Eucalyptus", note:"Essential oils especially dangerous. Causes drooling, weakness.", severity:"high" },
+    { emoji:"🌻", name:"Chrysanthemums", note:"Causes vomiting, diarrhea, skin irritation.", severity:"medium" },
+    { emoji:"💐", name:"Tulips & Daffodils", note:"Bulbs are most toxic. Causes drooling, convulsions.", severity:"high" },
+    { emoji:"🌿", name:"Sago Palm", note:"Extremely toxic. Causes liver failure, often fatal.", severity:"critical" },
+  ],
+  household_dangers: [
+    { emoji:"🧴", name:"Essential Oils", note:"Tea tree, peppermint, citrus, lavender — toxic when inhaled or absorbed through skin. Even diffusers can be harmful." },
+    { emoji:"🧹", name:"Cleaning Products", note:"Bleach, disinfectants, floor cleaners. Store securely. Rinse surfaces cats walk on." },
+    { emoji:"🪡", name:"String & Thread", note:"Can cause deadly intestinal blockage if swallowed. Includes yarn, tinsel, rubber bands, hair ties." },
+    { emoji:"💊", name:"Human Medications", note:"Ibuprofen, acetaminophen (Tylenol), antidepressants — all potentially fatal. Never give human meds." },
+    { emoji:"🪟", name:"Open Windows", note:"'High-rise syndrome' — cats misjudge jumps. Always use secure screens." },
+    { emoji:"🧺", name:"Washing Machines", note:"Cats love warm, enclosed spaces. Always check before starting a cycle." },
+    { emoji:"🕯️", name:"Candles & Wax Melts", note:"Burns, toxic fumes from scented products. Use flameless alternatives." },
+    { emoji:"🪴", name:"Fertilizers & Pesticides", note:"Garden chemicals on paws get ingested during grooming." },
+  ],
+  health_signs: {
+    urgent: [
+      { emoji:"🚨", name:"Difficulty Breathing", note:"Open-mouth breathing, panting, wheezing — emergency." },
+      { emoji:"🚨", name:"Not Eating 24+ Hours", note:"Cats can develop hepatic lipidosis (fatty liver) fast." },
+      { emoji:"🚨", name:"Straining to Urinate", note:"Especially male cats. Urinary blockage is fatal within days." },
+      { emoji:"🚨", name:"Seizures / Collapse", note:"Any sudden neurological episode needs immediate vet care." },
+      { emoji:"🚨", name:"Ingested Toxic Substance", note:"Don't wait for symptoms. Call vet or poison control." },
+      { emoji:"🚨", name:"Severe Vomiting/Diarrhea", note:"Multiple episodes, blood present, or lasting 24+ hours." },
+    ],
+    monitor: [
+      { emoji:"👀", name:"Hiding More Than Usual", note:"Cats hide pain. Sudden withdrawal is a red flag." },
+      { emoji:"👀", name:"Changes in Appetite", note:"Eating more or less can signal thyroid, diabetes, kidney issues." },
+      { emoji:"👀", name:"Excessive Thirst", note:"Drinking noticeably more water — possible diabetes or kidney disease." },
+      { emoji:"👀", name:"Litter Box Changes", note:"Frequency, consistency, blood, or going outside the box." },
+      { emoji:"👀", name:"Weight Loss/Gain", note:"Unexplained changes even with normal eating." },
+      { emoji:"👀", name:"Bad Breath", note:"Can indicate dental disease, kidney disease, or diabetes." },
+      { emoji:"👀", name:"Excessive Grooming", note:"Bald patches or raw skin may signal allergies, stress, or pain." },
+      { emoji:"👀", name:"Third Eyelid Visible", note:"Nictitating membrane showing can indicate illness." },
+    ]
+  },
+  daily_care: [
+    { emoji:"🥣", name:"Feeding", note:"2 meals/day for adults. Wet food preferred for hydration. Always fresh water available. No free-feeding dry food (obesity risk)." },
+    { emoji:"🚰", name:"Water", note:"Cats prefer running water — consider a fountain. Place water away from food bowl. Multiple stations around the house." },
+    { emoji:"🧹", name:"Litter Box", note:"Scoop daily, full clean weekly. 1 box per cat + 1 extra. Unscented clumping litter preferred. Quiet, accessible location." },
+    { emoji:"🪮", name:"Grooming", note:"Brush weekly (daily for long-haired). Check ears for mites/wax. Trim nails every 2-3 weeks. Never declaw." },
+    { emoji:"🎾", name:"Play & Exercise", note:"15-30 min interactive play daily. Wand toys, laser pointers (end with a treat), puzzle feeders. Prevents obesity and boredom." },
+    { emoji:"🏥", name:"Vet Visits", note:"Annual checkups minimum. Senior cats (7+) every 6 months. Keep vaccinations current. Discuss dental cleaning." },
+    { emoji:"🪪", name:"ID & Microchip", note:"Microchip is permanent ID. Keep info updated. Indoor cats still need ID — they can escape." },
+    { emoji:"🧠", name:"Mental Stimulation", note:"Cat trees, window perches, rotating toys, hiding spots. Vertical space is essential for cats." },
+    { emoji:"😺", name:"Socialization", note:"Respect their boundaries. Slow blinks = trust. Let them come to you. Never force interaction." },
+    { emoji:"🌡️", name:"Temperature", note:"Ideal room: 20-25°C (68-77°F). Cats seek warmth but can overheat. Never leave in cars." },
+  ],
+  quick_ref: {
+    vitals: [
+      { label:"Body Temperature", value:"38-39°C (100.5-102.5°F)" },
+      { label:"Heart Rate", value:"140-220 bpm" },
+      { label:"Respiratory Rate", value:"20-30 breaths/min" },
+      { label:"Average Lifespan", value:"12-18 years (indoor)" },
+      { label:"Adult Weight", value:"3.5-5.5 kg (8-12 lbs) typical" },
+      { label:"Daily Water Intake", value:"~60 ml per kg body weight" },
+      { label:"Daily Calorie Need", value:"~200-300 kcal (avg adult)" },
+      { label:"Sleep", value:"12-16 hours per day" },
+    ],
+    vaccines: [
+      { name:"FVRCP (Core)", note:"Panleukopenia, calicivirus, rhinotracheitis. Kitten series + boosters." },
+      { name:"Rabies (Core)", note:"Required by law in many areas. One dose, then boosters." },
+      { name:"FeLV (Recommended)", note:"Feline leukemia. Especially for outdoor/multi-cat homes." },
+      { name:"FIV (Optional)", note:"Feline immunodeficiency. Discuss with vet based on risk." },
+    ],
+    ages: [
+      { age:"0-6 months", stage:"Kitten", note:"3-4 meals/day, socialization critical, first vaccines" },
+      { age:"7 months–2 years", stage:"Junior", note:"Spay/neuter, transition to adult food, high energy" },
+      { age:"3-6 years", stage:"Prime", note:"Annual checkups, maintain healthy weight, dental care" },
+      { age:"7-10 years", stage:"Mature", note:"Bi-annual vet visits, watch for weight changes" },
+      { age:"11-14 years", stage:"Senior", note:"More frequent vet checks, joint support, softer food" },
+      { age:"15+ years", stage:"Geriatric", note:"Close monitoring, kidney/thyroid screening, comfort focus" },
+    ]
+  }
+};
+
+// ── Render ──
+function renderFoodTab() {
+  return `
+    <div class="legend">
+      <div class="legend-item"><span class="legend-dot safe"></span> Safe</div>
+      <div class="legend-item"><span class="legend-dot caution"></span> Caution / Moderation</div>
+      <div class="legend-item"><span class="legend-dot danger"></span> Dangerous / Toxic</div>
+    </div>
+
+    <h2 class="section-title" style="color:var(--safe)">✓ Safe Foods</h2>
+    <p class="section-subtitle">Generally safe in moderation as occasional treats alongside a balanced cat diet</p>
+    <div class="food-grid" data-section="safe">
+      ${DATA.food.safe.map(f => foodCard(f, 'safe')).join('')}
+    </div>
+
+    <h2 class="section-title" style="color:var(--caution)">⚠ Use Caution</h2>
+    <p class="section-subtitle">Not inherently toxic but can cause issues — small amounts, rarely, and watch for reactions</p>
+    <div class="food-grid" data-section="caution">
+      ${DATA.food.caution.map(f => foodCard(f, 'caution')).join('')}
+    </div>
+
+    <h2 class="section-title" style="color:var(--danger)">✕ Never Feed</h2>
+    <p class="section-subtitle">Toxic or highly dangerous — keep completely away from your cat</p>
+    <div class="food-grid" data-section="danger">
+      ${DATA.food.danger.map(f => foodCard(f, 'danger')).join('')}
+    </div>
+  `;
+}
+
+function foodCard(f, level) {
+  const labels = { safe:'Safe', caution:'Caution', danger:'Toxic' };
+  return `
+    <div class="food-card ${level}" data-search="${f.name.toLowerCase()} ${f.note.toLowerCase()}">
+      <span class="emoji">${f.emoji}</span>
+      <div class="info">
+        <div class="name">${f.name}</div>
+        <div class="note">${f.note}</div>
+      </div>
+      <span class="badge">${labels[level]}</span>
+    </div>`;
+}
+
+function renderToxicTab() {
+  const sevColors = { critical:'var(--danger)', high:'var(--caution)', medium:'var(--info)', low:'var(--text-muted)' };
+  const sevLabels = { critical:'LETHAL', high:'HIGH', medium:'MODERATE', low:'MILD' };
+  return `
+    <h2 class="section-title">🌿 Toxic Plants</h2>
+    <p class="section-subtitle">Common houseplants and flowers that are harmful to cats — remove or place out of reach</p>
+    <div class="food-grid">
+      ${DATA.toxic_plants.map(p => `
+        <div class="food-card ${p.severity === 'critical' ? 'danger' : p.severity === 'high' ? 'caution' : 'safe'}" data-search="${p.name.toLowerCase()} ${p.note.toLowerCase()}">
+          <span class="emoji">${p.emoji}</span>
+          <div class="info">
+            <div class="name">${p.name}</div>
+            <div class="note">${p.note}</div>
+          </div>
+          <span class="badge" style="color:${sevColors[p.severity]};background:${sevColors[p.severity]}15">${sevLabels[p.severity]}</span>
+        </div>`).join('')}
+    </div>
+
+    <h2 class="section-title">🏠 Household Dangers</h2>
+    <p class="section-subtitle">Common items around the home that pose risks to cats</p>
+    <div class="info-grid">
+      ${DATA.household_dangers.map(d => `
+        <div class="info-card warn" data-search="${d.name.toLowerCase()} ${d.note.toLowerCase()}">
+          <div class="card-header">
+            <span class="emoji">${d.emoji}</span>
+            <span class="title">${d.name}</span>
+          </div>
+          <div class="card-body">${d.note}</div>
+        </div>`).join('')}
+    </div>
+  `;
+}
+
+function renderHealthTab() {
+  return `
+    <h2 class="section-title" style="color:var(--danger)">🚨 Emergency — See a Vet Immediately</h2>
+    <p class="section-subtitle">These signs require urgent veterinary attention — don't wait</p>
+    <div class="info-grid">
+      ${DATA.health_signs.urgent.map(s => `
+        <div class="info-card warn" data-search="${s.name.toLowerCase()} ${s.note.toLowerCase()}">
+          <div class="card-header">
+            <span class="emoji">${s.emoji}</span>
+            <span class="title">${s.name}</span>
+          </div>
+          <div class="card-body">${s.note}</div>
+        </div>`).join('')}
+    </div>
+
+    <h2 class="section-title" style="color:var(--caution)">👀 Monitor & Consult Vet</h2>
+    <p class="section-subtitle">Schedule a vet visit if you notice these — early detection saves lives</p>
+    <div class="info-grid">
+      ${DATA.health_signs.monitor.map(s => `
+        <div class="info-card alert" data-search="${s.name.toLowerCase()} ${s.note.toLowerCase()}">
+          <div class="card-header">
+            <span class="emoji">${s.emoji}</span>
+            <span class="title">${s.name}</span>
+          </div>
+          <div class="card-body">${s.note}</div>
+        </div>`).join('')}
+    </div>
+  `;
+}
+
+function renderCareTab() {
+  return `
+    <h2 class="section-title">😺 Daily Care Essentials</h2>
+    <p class="section-subtitle">The fundamentals of keeping a happy, healthy cat</p>
+    <div class="info-grid">
+      ${DATA.daily_care.map(c => `
+        <div class="info-card tip" data-search="${c.name.toLowerCase()} ${c.note.toLowerCase()}">
+          <div class="card-header">
+            <span class="emoji">${c.emoji}</span>
+            <span class="title">${c.name}</span>
+          </div>
+          <div class="card-body">${c.note}</div>
+        </div>`).join('')}
+    </div>
+  `;
+}
+
+function renderQuickRefTab() {
+  const q = DATA.quick_ref;
+  return `
+    <h2 class="section-title">📊 Normal Vitals & Stats</h2>
+    <p class="section-subtitle">Know what's normal so you can spot what's not</p>
+    <div class="stat-row">
+      ${q.vitals.map(v => `
+        <div class="stat-box" data-search="${v.label.toLowerCase()} ${v.value.toLowerCase()}">
+          <div class="val">${v.value.split(' ')[0]}</div>
+          <div class="label">${v.label}<br><span style="opacity:0.6;font-size:0.72rem">${v.value.includes(' ') ? v.value.split(' ').slice(1).join(' ') : ''}</span></div>
+        </div>`).join('')}
+    </div>
+
+    <h2 class="section-title">💉 Vaccination Guide</h2>
+    <p class="section-subtitle">Core and recommended vaccines — consult your vet for scheduling</p>
+    <div class="info-grid">
+      ${q.vaccines.map(v => `
+        <div class="info-card note" data-search="${v.name.toLowerCase()} ${v.note.toLowerCase()}">
+          <div class="card-header"><span class="title">${v.name}</span></div>
+          <div class="card-body">${v.note}</div>
+        </div>`).join('')}
+    </div>
+
+    <h2 class="section-title">🐱 Life Stages</h2>
+    <p class="section-subtitle">What to expect and prioritize at each stage of your cat's life</p>
+    <table class="ref-table">
+      <thead><tr><th>Age</th><th>Stage</th><th>Key Focus</th></tr></thead>
+      <tbody>
+        ${q.ages.map(a => `
+          <tr data-search="${a.age.toLowerCase()} ${a.stage.toLowerCase()} ${a.note.toLowerCase()}">
+            <td class="item-name">${a.age}</td>
+            <td>${a.stage}</td>
+            <td>${a.note}</td>
+          </tr>`).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+// ── Tab System ──
+const renderers = {
+  food: renderFoodTab,
+  toxic: renderToxicTab,
+  health: renderHealthTab,
+  care: renderCareTab,
+  quickref: renderQuickRefTab,
+};
+
+let activeTab = 'food';
+const content = document.getElementById('content');
+const searchInput = document.getElementById('searchInput');
+
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  content.innerHTML = `<div class="tab-panel active">${renderers[tab]()}</div>`;
+  applySearch(searchInput.value);
+}
+
+document.getElementById('navTabs').addEventListener('click', e => {
+  if (e.target.classList.contains('nav-tab')) switchTab(e.target.dataset.tab);
+});
+
+// ── Search ──
+function applySearch(query) {
+  const q = query.toLowerCase().trim();
+  const items = content.querySelectorAll('[data-search]');
+  let visible = 0;
+  items.forEach(el => {
+    const match = !q || el.dataset.search.includes(q);
+    el.style.display = match ? '' : 'none';
+    if (match) visible++;
+  });
+  // Show/hide section titles based on visible children
+  content.querySelectorAll('.food-grid, .info-grid').forEach(grid => {
+    const hasVisible = [...grid.children].some(c => c.style.display !== 'none');
+    grid.style.display = hasVisible ? '' : 'none';
+    // Hide related title & subtitle
+    let el = grid.previousElementSibling;
+    while (el && (el.classList.contains('section-subtitle') || el.classList.contains('section-title'))) {
+      el.style.display = hasVisible ? '' : 'none';
+      el = el.previousElementSibling;
+    }
+  });
+  // No results message
+  const existing = content.querySelector('.no-results');
+  if (existing) existing.remove();
+  if (q && visible === 0) {
+    content.insertAdjacentHTML('beforeend', `
+      <div class="no-results"><span class="big">🐱</span>No results for "${q}"<br>Try a different search term</div>
+    `);
+  }
+}
+
+searchInput.addEventListener('input', e => applySearch(e.target.value));
+
+// ── Init ──
+switchTab('food');
+</script>
+</body>
+</html>
